@@ -64,7 +64,8 @@ class DataViewModel @Inject constructor(private val userPreferencesRepository: U
         accessToken: String,
         natsUrl: String,
         thresholdEth: String,
-        thresholdSol: String
+        thresholdSol: String,
+        callback: () -> Unit
     ) {
         _isSaved = false
         viewModelScope.launch {
@@ -76,6 +77,7 @@ class DataViewModel @Inject constructor(private val userPreferencesRepository: U
                 thresholdEth,
                 thresholdSol
             )
+            callback()
             _isSaved = true
         }
     }
