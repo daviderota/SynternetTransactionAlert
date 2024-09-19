@@ -44,7 +44,9 @@ fun UserConfigFormScreen(
 
     // Layout verticale con padding
     Column(
-        modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally, // Allinea i contenuti orizzontalmente al centro
         verticalArrangement = Arrangement.Center //
     ) {
@@ -134,7 +136,7 @@ fun UserConfigFormScreen(
             // Primo campo di testo
             TextField(
                 value = thresholdEth,
-                onValueChange = {viewModel.thresholdEth = it },
+                onValueChange = { viewModel.thresholdEth = it },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true,
                 trailingIcon = {
@@ -181,8 +183,10 @@ fun UserConfigFormScreen(
                     thresholdEth,
                     thresholdSol
                 )
+                {
+                    goToServiceActivated()
+                }
 
-                goToServiceActivated()
             },
             enabled = isValidUserConfig(
                 viewModel.accessToken,
