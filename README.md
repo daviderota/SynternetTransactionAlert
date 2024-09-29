@@ -71,7 +71,11 @@ This is a Kotlin-based **Android** application developed using **Clean Architect
        implementation 'com.github.daviderota:syntropy-pubsub-kotlin:<latest_version>'
    }
    ```
-4. **Run the App**: Launch the app in Android Studio.
+4. **Architecture schema**
+   ![Architecture](https://github.com/daviderota/SynternetTransactionAlert/blob/main/release/Architecture.png)
+   
+
+5. **Run the App**: Launch the app in Android Studio.
 
    OR **Run compiled App**:
    Alternatively, you can install the compiled version, namely:
