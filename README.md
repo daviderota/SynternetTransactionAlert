@@ -73,6 +73,15 @@ This is a Kotlin-based **Android** application developed using **Clean Architect
    ```
 4. **Run the App**: Launch the app in Android Studio.
 
+   OR **Run compiled App**:
+   Alternatively, you can install the compiled version, namely:
+   1. The first thing to do is to enable Developer Mode on your smartphone. (If you don't know how, search on Google.com for a guide that explains how to do it based on the model of your smartphone.)
+
+2. Download the file found in this repository: release/app-release.apk to your smartphone and install it by clicking on it.
+
+3. Once installed, launch the application "WApp."
+
+
 ## Usage
 1. On first launch, the app will request a user-defined transaction threshold for both Ethereum and Solana.
 2. The app will start monitoring blockchain activity in the background.
