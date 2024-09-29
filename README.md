@@ -12,6 +12,14 @@ This is a Kotlin-based Android application developed using **Clean Architecture*
 ## Technologies & Libraries Used
 ### 1. **Clean Architecture**
    - This app follows **Clean Architecture**, promoting separation of concerns and ensuring scalability, testability, and maintainability.
+   - It consists of the following modules:
+      **app**: This module is the application itself, containing the user interface (UI) and initiating the foreground service.
+
+      **common**: This module includes functions that are shared across all modules and supports business logic.
+
+      **datastore**: This module handles saving and reading data on the device.
+
+      **NatsProvider**: This module contains the Kotlin library found at https://github.com/daviderota/syntropy-pubsub-kotlin, which has been validated by the Synternet team and referenced in the SDK Data Layer documentation.
 
 ### 2. **Networking**
    - **[OkHttp](https://square.github.io/okhttp/)**: Handles HTTP connections and low-level networking operations.
