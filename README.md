@@ -1,7 +1,7 @@
 
 # Ethereum & Solana Transaction Alert App
 
-This is a Kotlin-based Android application developed using **Clean Architecture** principles. The app listens to blockchain transaction streams (`synternet.ethereum.tx` and `synternet.solana.tx`) and sends push notifications when an Ethereum (ETH) or Solana (SOL) transaction above a user-defined threshold is detected. Clicking on the notification opens the corresponding transaction on **EthScan.io** or **Solscan.io** in the user's default browser.
+This is a Kotlin-based **Android** application developed using **Clean Architecture** principles. The app listens to blockchain transaction streams (`synternet.ethereum.tx` and `synternet.solana.tx`) and sends push notifications when an Ethereum (ETH) or Solana (SOL) transaction above a user-defined threshold is detected. Clicking on the notification opens the corresponding transaction on **EthScan.io** or **Solscan.io** in the user's default browser.
 
 ## Features
 - **Blockchain Monitoring**: Listens to ETH and SOL transaction streams from the **Synternet** network.
@@ -13,6 +13,7 @@ This is a Kotlin-based Android application developed using **Clean Architecture*
 ### 1. **Clean Architecture**
    - This app follows **Clean Architecture**, promoting separation of concerns and ensuring scalability, testability, and maintainability.
    - It consists of the following modules:
+    
       **app**: This module is the application itself, containing the user interface (UI) and initiating the foreground service.
 
       **common**: This module includes functions that are shared across all modules and supports business logic.
@@ -52,7 +53,7 @@ This is a Kotlin-based Android application developed using **Clean Architecture*
 ### Steps
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/your-repo/your-project.git
+   git clone https://github.com/daviderota/SynternetTransactionAlert.git
    ```
 2. **Open the Project in Android Studio**
 3. **Configure API & Dependencies**
