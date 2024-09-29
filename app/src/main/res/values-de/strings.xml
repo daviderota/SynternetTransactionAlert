@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name" translatable="false">WApp</string>
+    <string name="activated_services_hello">Hallo, ich bin WApp</string>
+    <string name="activated_services_whale_assistant">Ihr Whale-Assistent</string>
+    <string name="activated_services_is_started">Dienst wurde gestartet.. Überprüfen Sie die Benachrichtigung..</string>
+    <string name="activated_services_stop_and_edit">Stoppen und Konfiguration bearbeiten</string>
+    <string name="user_config_hello">Hallo, ich bin WApp und helfe Ihnen, den Crypto Whale abzufangen!</string>
+    <string name="user_config_description">Abonnieren Sie die Streams \'synternet.ethereum.tx\' und \'synternet.solana.tx\' unter https://portal.synternet.com und füllen Sie das folgende Formular aus</string>
+    <string name="save_and_run">Speichern und ausführen</string>
+    <string name="alert_exit_title">Bildschirm verlassen</string>
+    <string name="alert_exit_questions">Sind Sie sicher, dass Sie verlassen möchten?</string>
+    <string name="btn_no">Nein</string>
+    <string name="btn_yes">Ja</string>
+    <string name="service_name">Dienst</string>
+    <string name="service_welcome_message">WApp-Dienst wartet auf einen Whale :)</string>
+    <string name="service_someone_moved">Jemand hat etwas bewegt</string>
+</resources>

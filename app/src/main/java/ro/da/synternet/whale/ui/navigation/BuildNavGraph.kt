@@ -2,7 +2,6 @@ package ro.da.synternet.whale.ui.navigation
 
 import android.content.Context
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -24,7 +23,7 @@ fun BuildNavGraph(context: Context, navController: NavHostController, viewModel:
 
         addSplash(navController, this, viewModel)
 
-        addNotificationPermissionRequest(context, navController, this)
+        addNotificationPermissionRequest(navController, this)
 
         addUserConfig(navController, this)
 
@@ -46,7 +45,6 @@ private fun addSplash(
 }
 
 private fun addNotificationPermissionRequest(
-    context: Context,
     navController: NavController,
     navGraphBuilder: NavGraphBuilder
 ) {
@@ -55,7 +53,7 @@ private fun addNotificationPermissionRequest(
 
         NotificationPermissionRequestScreen(goToUserConfigForm = {
             navController.navigate(NavRoute.FormUserConfig.path)
-        }, navGraphBuilder)
+        })
     }
 
 }
@@ -73,7 +71,7 @@ private fun addUserConfig(
     navGraphBuilder.composable(route = NavRoute.FormUserConfig.path) {
         UserConfigFormScreen(goToServiceActivated = {
             goToServiceActivated(navController)
-        }, navGraphBuilder)
+        })
 
     }
 }
@@ -93,5 +91,3 @@ private fun addServiceActivated(
 
     }
 }
-
-

@@ -29,7 +29,7 @@ dependencyResolutionManagement {
 }
 
 
-rootProject.name = "TApp"
+rootProject.name = "WApp"
 include(":app")
 include(":NatsProvider")
 include(":datastore")

@@ -10,10 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,7 +34,6 @@ fun SplashScreen(
 ) {
 
     val userConfigLoaded by viewModel.userConfigLoaded.collectAsState()
-
     val accessToken = viewModel.accessToken
     val natsUrl = viewModel.natsUrl
     val thresholdEth = viewModel.thresholdEth
@@ -72,8 +71,6 @@ fun SplashScreen(
                     }
                 }
             }
-
-
         }
 
         LottieAnim(R.raw.whale)
@@ -81,10 +78,10 @@ fun SplashScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            text = "Hi, I'm TApp",
+            text = stringResource(id = R.string.activated_services_hello),
             fontSize = 38.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            lineHeight = 38.sp
         )
-
     }
 }

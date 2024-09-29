@@ -3,25 +3,23 @@ package ro.da.synternet.whale.ui.screens
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import ro.da.synternet.common.isValidUserConfig
 import ro.da.synternet.whale.R
-import ro.da.synternet.whale.ui.navigation.NavRoute
 import ro.da.synternet.whale.ui.startMyForegroundService
 import ro.da.synternet.whale.ui.stopMyForegroundService
 import ro.da.synternet.whale.viewmodel.DataViewModel
@@ -66,14 +64,15 @@ fun ServiceActivatedScreen(
 
 
             Text(
-                text = "Hi, I'm TApp",
+                text = stringResource(id = R.string.activated_services_hello),
                 fontSize = 38.sp,
                 fontWeight = FontWeight.Bold,
+                lineHeight = 42.sp,
                 modifier = Modifier.fillMaxWidth()
             )
 
             Text(
-                text = "Your Whale Assistant",
+                text = stringResource(id = R.string.activated_services_whale_assistant),
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth()
@@ -83,23 +82,25 @@ fun ServiceActivatedScreen(
 
             LottieAnim(R.raw.skyrocket)
             Text(
-                text = "Service is started.. check the Notification..",
+                text = stringResource(id = R.string.activated_services_is_started),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth()
             )
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 onClick = {
                     stopMyForegroundService(context)
                     goToUserConfig()
                 }) {
-                Text(text = "Edit configuration")
+                Text(text = stringResource(id = R.string.activated_services_stop_and_edit))
             }
 
-        }
-    } else {
 
+
+        }
     }
 
 }

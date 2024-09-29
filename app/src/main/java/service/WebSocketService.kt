@@ -47,17 +47,12 @@ class WebSocketService : Service() {
     private var gson: Gson = Gson()
     private var notificationId: Random = Random()
 
-    /**
-     * 3 000 000 000 000 000 000 -> 3ETH
-     */
 
     override fun onCreate() {
         super.onCreate()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Avvia il servizio in foreground con una notifica
-
         accessToken = intent?.getStringExtra(Const.ACCESS_TOKEN)
         natsUrl = intent?.getStringExtra(Const.NATS_URL)
         streamEth = intent?.getStringExtra(Const.STREAM_ETH)
@@ -79,35 +74,24 @@ class WebSocketService : Service() {
         }
 
         createNotificationChannel()
-        // Creare la notifica
         val notification = createServiceNotification()
-
-        // Avviare il servizio in foreground
         startForeground(1, notification)
-
         return START_STICKY
     }
 
     override fun onBind(intent: Intent?): IBinder? {
-        return null // Non usiamo il binding, quindi restituiamo null
+        return null
     }
 
 
     private fun createServiceNotification(): Notification {
-        /*  val notificationIntent = Intent(this, MainActivity::class.java)
-          val pendingIntent: PendingIntent = PendingIntent.getActivity(
-              this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE
-          )*/
-
         return NotificationCompat.Builder(this, "FS_CHANNEL_ID")
-            .setContentTitle("Service")
-            .setContentText("TApp Service are waiting a Whale :)")
+            .setContentTitle(getString(R.string.service_name))
+            .setContentText(getString(R.string.service_welcome_message))
             .setOngoing(true)
             .setAutoCancel(false)
             .setPriority(NotificationCompat.PRIORITY_LOW)
-            .setSmallIcon(R.drawable.ic_notification) // Sostituisci con la tua icona
-            //  .setContentIntent(pendingIntent) // Intent che si attiva al clic sulla notifica
-            .build()
+            .setSmallIcon(R.drawable.ic_notification).build()
     }
 
     private fun createNotificationChannel() {
@@ -122,7 +106,6 @@ class WebSocketService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        // Pulisci eventuali risorse qui
         natsProviderEth?.unsubscribe()
         natsProviderEth?.disconnect()
 
@@ -130,11 +113,9 @@ class WebSocketService : Service() {
         natsProviderSol?.disconnect()
     }
 
-    //synternet.ethereum.tx
-
     private fun startWebSocketEth(accessToken: String, natsUrl: String, stream: String) {
         try {
-            natsProviderEth = NatsProvider(accessToken, natsUrl, stream)
+            natsProviderEth = NatsProvider(accessToken, natsUrl, "smith.stream.live")
             natsProviderEth?.connect(connectionMessageHandlerEth)
             natsProviderEth?.subscribe(subscribeMessageHandlerEth)
         } catch (e: Exception) {
@@ -142,7 +123,6 @@ class WebSocketService : Service() {
         }
     }
 
-    //synternet.solana.tx
     private fun startWebSocketSol(accessToken: String, natsUrl: String, stream: String) {
         try {
             natsProviderSol = NatsProvider(accessToken, natsUrl, stream)
@@ -155,8 +135,6 @@ class WebSocketService : Service() {
 
 
     private val connectionMessageHandlerEth = MessageHandler { connectionMsg ->
-        val connectionResponse = String(connectionMsg.data, StandardCharsets.UTF_8)
-        println("Connection Message: $connectionResponse")
     }
 
     private val subscribeMessageHandlerEth = MessageHandler { subscribeMsg ->
@@ -166,8 +144,6 @@ class WebSocketService : Service() {
         thresholdEth?.let { thresholdEth ->
             val ethValue = ethStream.getEthValue()
             if (ethValue > thresholdEth.toFloat()) {
-                //Whale
-                println("Eth Whale sent $ethValue Eth: $response")
                 triggerLocalNotification(Type.ETH, ethStream.hash, ethValue.toString())
             }
 
@@ -176,8 +152,6 @@ class WebSocketService : Service() {
 
 
     private val connectionMessageHandlerSol = MessageHandler { connectionMsg ->
-        val connectionResponse = String(connectionMsg.data, StandardCharsets.UTF_8)
-        println("Connection Message: $connectionResponse")
     }
 
     private val subscribeMessageHandlerSol = MessageHandler { subscribeMsg ->
@@ -187,8 +161,6 @@ class WebSocketService : Service() {
         thresholdSol?.let { thresholdSol ->
             val solValue = solStream.getSolValue()
             if (solValue > thresholdSol.toFloat()) {
-                //Whale
-                println("Solana Whale sent $solValue SOL: $response")
                 triggerLocalNotification(Type.SOL, solStream.hash, solValue.toString())
             }
 
@@ -196,14 +168,10 @@ class WebSocketService : Service() {
 
     }
 
-
-    // Metodo per scatenare una notifica locale quando il controllo dà esito positivo
     private fun triggerLocalNotification(type: Type, address: String?, value: String) {
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notification = createLocalNotification(type, value, address)
-
-        // Mostra la notifica
         notificationManager.notify(notificationId.nextInt(100), notification)
     }
 
@@ -243,21 +211,11 @@ class WebSocketService : Service() {
 
         return NotificationCompat.Builder(this, "FS_CHANNEL_ID")
             .setContentTitle(title)
-            .setContentText("Someone moved $value $crypto $addressStr")
+            .setContentText(getString(R.string.service_someone_moved) + " $value $crypto $addressStr")
             .setOngoing(true)
             .setAutoCancel(true)
-            .setSmallIcon(icon) // Sostituisci con la tua icona
-            .setContentIntent(pendingIntent) // Intent che si attiva al clic sulla notifica
+            .setSmallIcon(icon)
+            .setContentIntent(pendingIntent)
             .build()
-
-
-        /*  val notificationIntent = Intent(this, MainActivity::class.java)
-          val pendingIntent: PendingIntent = PendingIntent.getActivity(
-              this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE
-          )*/
-
-
     }
-
-
 }

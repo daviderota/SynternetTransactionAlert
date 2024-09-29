@@ -1,5 +1,7 @@
 package ro.da.synternet.whale.ui.screens
 
+import android.app.Activity
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,19 +15,25 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavGraphBuilder
 import ro.da.synternet.common.isValidUserConfig
 import ro.da.synternet.whale.R
 import ro.da.synternet.whale.viewmodel.DataViewModel
@@ -33,16 +41,41 @@ import ro.da.synternet.whale.viewmodel.DataViewModel
 @Composable
 fun UserConfigFormScreen(
     goToServiceActivated: () -> Unit,
-    navGraphBuilder: NavGraphBuilder,
     viewModel: DataViewModel = hiltViewModel()
 ) {
-    // val accessToken = viewModel.accessToken
+    var showDialog by remember { mutableStateOf(false) }
+    val activity = LocalContext.current as? Activity
+
+    BackHandler {
+        showDialog = true
+    }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(stringResource(id = R.string.alert_exit_title)) },
+            text = { Text(stringResource(id = R.string.alert_exit_questions)) },
+            confirmButton = {
+                Button(onClick = {
+                    showDialog = false
+                    activity?.finishAffinity()
+                    // Perform the back action manually
+                }) {
+                    Text(stringResource(id = R.string.btn_yes))
+                }
+            },
+            dismissButton = {
+                Button(onClick = { showDialog = false }) {
+                    Text(stringResource(id = R.string.btn_no))
+                }
+            }
+        )
+    }
+
     val natsUrl = viewModel.natsUrl
     val thresholdEth = viewModel.thresholdEth
     var thresholdSol = viewModel.thresholdSol
 
-
-    // Layout verticale con padding
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -52,7 +85,7 @@ fun UserConfigFormScreen(
     ) {
 
         Text(
-            text = "Hi, i'm TApp and i'll help you intercept the Crypto Whale!",
+            text = stringResource(id = R.string.user_config_hello),
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
@@ -61,14 +94,14 @@ fun UserConfigFormScreen(
         )
 
         Text(
-            text = "Subscribe the 'synternet.ethereum.tx' and 'synternet.solana.tx' streams from https://portal.synternet.com and compile the form behind",
+            text = stringResource(id = R.string.user_config_description),
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         )
-        // Primo campo: Access Token
+
         TextField(
             value = viewModel.accessToken,
             onValueChange = { viewModel.accessToken = it },
@@ -79,7 +112,6 @@ fun UserConfigFormScreen(
                 .clickable { }
         )
 
-        // Secondo campo: URL
         TextField(
             value = natsUrl,
             onValueChange = { viewModel.natsUrl = it },
@@ -91,12 +123,11 @@ fun UserConfigFormScreen(
                 .clickable { }
         )
 
-        // Terzo campo: Stream
         TextField(
             value = "synternet.ethereum.tx",
             enabled = false,
             onValueChange = { },
-            label = { Text("Ethereum Stream ") },
+            label = { Text("Ethereum Stream") },
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
@@ -133,7 +164,6 @@ fun UserConfigFormScreen(
                 .clickable { },
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Primo campo di testo
             TextField(
                 value = thresholdEth,
                 onValueChange = { viewModel.thresholdEth = it },
@@ -141,20 +171,17 @@ fun UserConfigFormScreen(
                 singleLine = true,
                 trailingIcon = {
                     Image(
-                        painter = painterResource(id = R.drawable.ethereum), // Nome del file XML
+                        painter = painterResource(id = R.drawable.ethereum),
                         contentDescription = "Eth",
-                        modifier = Modifier.size(24.dp) // Modifica le dimensioni secondo necessità
+                        modifier = Modifier.size(24.dp)
                     )
 
                 },
                 modifier = Modifier
                     .weight(1f)
-                    .clickable { } // Assegna lo spazio in base al peso
-
-
+                    .clickable { }
             )
 
-            // Secondo campo di testo
             TextField(
                 value = thresholdSol,
                 onValueChange = { viewModel.thresholdSol = it },
@@ -162,17 +189,17 @@ fun UserConfigFormScreen(
                 singleLine = true,
                 trailingIcon = {
                     Image(
-                        painter = painterResource(id = R.drawable.solana), // Nome del file XML
+                        painter = painterResource(id = R.drawable.solana),
                         contentDescription = "Sol",
-                        modifier = Modifier.size(24.dp) // Modifica le dimensioni secondo necessità
+                        modifier = Modifier.size(24.dp)
                     )
                 },
                 modifier = Modifier
                     .weight(1f)
-                    .clickable { } // Assegna lo spazio in base al peso
-
+                    .clickable { }
             )
         }
+
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
@@ -182,11 +209,9 @@ fun UserConfigFormScreen(
                     natsUrl,
                     thresholdEth,
                     thresholdSol
-                )
-                {
+                ) {
                     goToServiceActivated()
                 }
-
             },
             enabled = isValidUserConfig(
                 viewModel.accessToken,
@@ -194,12 +219,10 @@ fun UserConfigFormScreen(
                 thresholdEth,
                 thresholdSol
             )
-
         ) {
-            Text(text = "Save and Run")
+            Text(text = stringResource(id = R.string.save_and_run))
         }
-
-
+        Spacer(modifier = Modifier.height(16.dp))
     }
 
 }

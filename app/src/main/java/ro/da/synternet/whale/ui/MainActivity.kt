@@ -23,11 +23,10 @@ import service.WebSocketService
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val intent = intent
-        handleIntent(intent) // Gestisci i dati dell'intent
+        handleIntent(intent)
 
         setContent {
             RootTheme {
@@ -36,53 +35,43 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-
-
     }
 
 
     private fun handleIntent(intent: Intent?) {
         intent?.extras?.let { _b ->
-
             val dataType = _b.getString("cry_type")
             if (dataType == WebSocketService.Type.ETH.value) {
                 val address = _b.getString("cry_address") ?: ""
                 //open webview etherscan
                 val url = "https://etherscan.io/tx/$address"
                 val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                // Avvio del browser
+                // start browser
                 startActivity(browserIntent)
             } else if (dataType == WebSocketService.Type.ETH.value) {
                 val address = _b.getString("cry_address") ?: ""
                 //open webview etherscan
                 val url = "https://solana.io/tx/$address"
                 val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                // Avvio del browser
+                // start browser
                 startActivity(browserIntent)
             }
-
-
         }
     }
 
+
     override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);  // Imposta il nuovo intent
-        handleIntent(intent);  // Gestisci i dati del nuovo intent
-
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleIntent(intent)
     }
-
-
 }
 
 
 @Composable
 fun MainScreen(context: Context, viewModel: DataViewModel) {
-
     val navController = rememberNavController()
     BuildNavGraph(context, navController, viewModel)
-
-
 }
 
 
@@ -93,73 +82,18 @@ fun startMyForegroundService(
     thresholdEth: String,
     thresholdSol: String
 ) {
-    val serviceIntent: Intent = Intent(context, WebSocketService::class.java)
+    val serviceIntent = Intent(context, WebSocketService::class.java)
     serviceIntent.putExtra(Const.ACCESS_TOKEN, accessToken)
     serviceIntent.putExtra(Const.NATS_URL, natsUrl)
     serviceIntent.putExtra(Const.STREAM_ETH, Const.STREAM_ETH_VALUE)
     serviceIntent.putExtra(Const.STREAM_SOL, Const.STREAM_SOL_VALUE)
     serviceIntent.putExtra(Const.THRESHOLD_ETH, thresholdEth)
     serviceIntent.putExtra(Const.THRESHOLD_SOL, thresholdSol)
-    context.startForegroundService(serviceIntent) // Lancia il servizio
+    context.startForegroundService(serviceIntent)
 }
 
 
 fun stopMyForegroundService(context: Context) {
     val serviceIntent: Intent = Intent(context, WebSocketService::class.java)
-    context.stopService(serviceIntent) // stoppa il servizio
+    context.stopService(serviceIntent)
 }
-
-/*
-@Composable
-fun next(
-    navController: NavController,
-    modifier: Modifier,
-    viewModel: DataViewModel,
-    isPermissionGranted: Boolean,
-    accessToken: String,
-    natsUrl: String,
-    thresholdEth: String,
-    thresholdSol: String
-) {
-    val context = LocalContext.current
-    if (isPermissionGranted) {
-        if (isValidUserConfig(
-                accessToken,
-                natsUrl,
-                thresholdEth,
-                thresholdSol
-            )
-        ) {
-            startMyForegroundService(
-                context,
-                accessToken,
-                natsUrl,
-                thresholdEth,
-                thresholdSol
-            )
-        } else {
-            stopMyForegroundService(context)
-            navController.navigate("form")
-        }
-    } else {
-        // UI per richiedere il permesso
-        Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-
-            LottieAnim(R.raw.enable_push, modifier)
-            Text(text = "Le notifiche non sono abilitate.")
-            Button(onClick = {
-                navController.navigate("requestPermissions")
-            }) {
-                Text(text = "Abilita notifiche")
-            }
-
-        }
-    }
-}
-*/

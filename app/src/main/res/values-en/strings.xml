@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">WApp</string>
+    <string name="app_name">WApp</string>
     <string name="activated_services_hello">Hi, I\'m WApp</string>
     <string name="activated_services_whale_assistant">Your Whale Assistant</string>
     <string name="activated_services_is_started">Service is started.. check the Notification..</string>

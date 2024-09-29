@@ -2,10 +2,10 @@ package ro.da.synternet.whale.ui.navigation
 
 sealed class NavRoute(val path: String) {
 
-    object Splashscreen: NavRoute("splashscreen")
-    object RequestPermissions: NavRoute("requestPermissions")
-    object FormUserConfig: NavRoute("formUserConfig")
-    object ServiceActivated: NavRoute("serviceActivated")
+    data object Splashscreen: NavRoute("splashscreen")
+    data object RequestPermissions: NavRoute("requestPermissions")
+    data object FormUserConfig: NavRoute("formUserConfig")
+    data object ServiceActivated: NavRoute("serviceActivated")
 
     fun withArgs(vararg args: String): String {
         return buildString {

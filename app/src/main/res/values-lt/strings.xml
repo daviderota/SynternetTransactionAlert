@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name" translatable="false">WApp</string>
+    <string name="activated_services_hello">Sveiki, aš esu WApp</string>
+    <string name="activated_services_whale_assistant">Jūsų Banginių Asistentas</string>
+    <string name="activated_services_is_started">Paslauga pradėta.. patikrinkite Pranešimą..</string>
+    <string name="activated_services_stop_and_edit">Sustabdykite ir Redaguokite nustatymus</string>
+    <string name="user_config_hello">Sveiki, aš esu WApp ir padėsiu jums susekti kripto Banginius!</string>
+    <string name="user_config_description">Prenumeruokite \'synternet.ethereum.tx\' ir \'synternet.solana.tx\' srautus iš https://portal.synternet.com ir užpildykite žemiau esančią formą</string>
+    <string name="save_and_run">Išsaugoti ir Paleisti</string>
+    <string name="alert_exit_title">Išeiti iš ekrano</string>
+    <string name="alert_exit_questions">Ar tikrai norite išeiti?</string>
+    <string name="btn_no">Ne</string>
+    <string name="btn_yes">Taip</string>
+    <string name="service_name">Paslauga</string>
+    <string name="service_welcome_message">WApp Paslauga laukia Banginio :)</string>
+    <string name="service_someone_moved">Kažkas pervedė lėšas</string>
+</resources>
