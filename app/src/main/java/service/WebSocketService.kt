@@ -115,7 +115,7 @@ class WebSocketService : Service() {
 
     private fun startWebSocketEth(accessToken: String, natsUrl: String, stream: String) {
         try {
-            natsProviderEth = NatsProvider(accessToken, natsUrl, "smith.stream.live")
+            natsProviderEth = NatsProvider(accessToken, natsUrl, stream)
             natsProviderEth?.connect(connectionMessageHandlerEth)
             natsProviderEth?.subscribe(subscribeMessageHandlerEth)
         } catch (e: Exception) {
