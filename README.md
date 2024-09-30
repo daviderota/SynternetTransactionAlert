@@ -92,6 +92,69 @@ This is a Kotlin-based **Android** application developed using **Clean Architect
 3. If a transaction surpasses the threshold, a notification will alert the user.
 4. Clicking the notification opens a browser with the transaction details.
 
+## Step-by-step
+Step 1: Splash Screen
+<div style="display: flex; align-items: center;">
+    <img src="https://github.com/daviderota/SynternetTransactionAlert/blob/main/release/001_Splash.png"style="width: 150px; margin-right: 20px;"/>
+    <p>
+        Upon opening the app, you will be greeted by the splash screen displaying the app’s logo. Wait a few seconds as the app loads.
+    </p>
+</div>
+
+
+
+Step 2: Permission Requests
+<div style="display: flex; align-items: center;">
+    <img src="https://github.com/daviderota/SynternetTransactionAlert/blob/main/release/002_Permissions.png"style="width: 150px; margin-right: 20px;"/>
+    <p>
+        The app will ask for permission to access the camera and to send push notifications. Click Allow to grant the necessary permissions for the app to function properly.
+    </p>
+</div>
+
+
+Step 3: App Configuration
+<div style="display: flex; align-items: center;">
+    <img src="https://github.com/daviderota/SynternetTransactionAlert/blob/main/release/003_Configuration.png"style="width: 150px; margin-right: 20px;"/>
+    <p>
+       Navigate to the configuration screen where you can enter the required details. 
+       Make sure to subscribe to the 'synternet.ethereum.tx' and 'synternet.solana.tx' streams on the Synternet Portal to monitor transactions.
+       The NATS URL can be found in the <a href='https://docs.synternet.com/build/dl-access-points'>official documentation</a>.
+    </p>
+</div>
+
+Step 4: ETH Transaction Notification
+<div style="display: flex; align-items: center;">
+    <img src="https://github.com/daviderota/SynternetTransactionAlert/blob/main/release/004_Eth_Notification.png"style="width: 150px; margin-right: 20px;"/>
+    <p>
+      When the app detects an Ethereum transaction that exceeds the set threshold, you will receive a push notification with details, including the amount of ETH transferred and the address involved.
+    </p>
+</div>
+
+Step 5: Service Started
+<div style="display: flex; align-items: center;">
+    <img src="https://github.com/daviderota/SynternetTransactionAlert/blob/main/release/005_Service_started.png"style="width: 150px; margin-right: 20px;"/>
+    <p>
+      Once the service has started, you will see a notification indicating that monitoring is active. The app is now listening for transactions on both the Ethereum and Solana networks.
+    </p>
+</div>
+
+## Testing and Results
+Testing Guidelines and Results
+How to Test the Project:
+
+Set up the environment: Ensure the required dependencies are installed, and user has the necessary access token to the Synternet layer.
+Install the app: Follow the installation steps to install the app on your Android device.
+Configure the streams: After launching the app, set the thresholds and transaction alerts for Ethereum and Solana, as shown in the configuration screen.
+Test notifications:
+Simulate a transaction that exceeds the set threshold.
+Confirm that a push notification is received with the transaction details.
+Verify navigation: Click on the notification and ensure it redirects to the correct URL on either EthScan.io or SolScan.io.
+Results:
+
+The app should detect and alert the user of any relevant transactions.
+Push notifications should contain accurate details and function as expected.
+All error cases should be handled gracefully, providing feedback if streams fail or permissions aren't granted.
+
 ## Future Enhancements
 - **Custom Alerts**: Add more customization for users to set different thresholds for different types of transactions.
 - **Multi-chain Support**: Expand support to other blockchain networks.
