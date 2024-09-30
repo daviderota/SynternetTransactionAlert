@@ -20,7 +20,7 @@ class DataViewModel @Inject constructor(private val userPreferencesRepository: U
 
     var accessToken by mutableStateOf("")
     var natsUrl by mutableStateOf("")
-    var streamEth by mutableStateOf("")
+    var streamEth by mutableStateOf("synternet.ethereum.tx")
     var streamSol by mutableStateOf("synternet.solana.tx")
     var thresholdEth by mutableStateOf("")
     var thresholdSol by mutableStateOf("")
