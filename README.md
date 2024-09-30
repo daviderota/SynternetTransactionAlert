@@ -122,7 +122,15 @@ Step 3: App Configuration
     </p>
 </div>
 
-Step 4: ETH Transaction Notification
+Step 4:Service Started
+<div style="display: flex; align-items: center;">
+    <img src="https://github.com/daviderota/SynternetTransactionAlert/blob/main/release/005_Service_started.png"style="width: 150px; margin-right: 20px;"/>
+    <p>
+      Once the service has started, you will see a notification indicating that monitoring is active. The app is now listening for transactions on both the Ethereum and Solana networks.
+    </p>
+</div>
+
+Step 5:  ETH Transaction Notification
 <div style="display: flex; align-items: center;">
     <img src="https://github.com/daviderota/SynternetTransactionAlert/blob/main/release/004_Eth_Notification.png"style="width: 150px; margin-right: 20px;"/>
     <p>
@@ -130,13 +138,6 @@ Step 4: ETH Transaction Notification
     </p>
 </div>
 
-Step 5: Service Started
-<div style="display: flex; align-items: center;">
-    <img src="https://github.com/daviderota/SynternetTransactionAlert/blob/main/release/005_Service_started.png"style="width: 150px; margin-right: 20px;"/>
-    <p>
-      Once the service has started, you will see a notification indicating that monitoring is active. The app is now listening for transactions on both the Ethereum and Solana networks.
-    </p>
-</div>
 
 ## Testing and Results
 Testing Guidelines and Results
