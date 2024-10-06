@@ -6,7 +6,7 @@ import ro.da.synternet.common.ueth_number
 
 data class EthStream(
     @SerializedName("hash") val hash: String,
-    @SerializedName("value") val value: String//eth moved
+    @SerializedName("value") val value: String
 ) {
 
     fun getEthValue(): Float {

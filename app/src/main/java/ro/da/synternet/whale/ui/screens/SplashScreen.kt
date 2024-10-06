@@ -24,6 +24,7 @@ import ro.da.synternet.common.areNotificationsEnabled
 import ro.da.synternet.common.isValidUserConfig
 import ro.da.synternet.whale.R
 import ro.da.synternet.whale.ui.navigation.NavRoute
+import ro.da.synternet.whale.ui.navigation.goToServiceActivated
 import ro.da.synternet.whale.ui.stopMyForegroundService
 import ro.da.synternet.whale.viewmodel.DataViewModel
 
@@ -58,7 +59,7 @@ fun SplashScreen(
                     )
                 ) {
                     if (areNotificationsEnabled(context)) {
-                        navController.navigate(NavRoute.ServiceActivated.path)
+                        goToServiceActivated(navController)
                     } else {
                         navController.navigate(NavRoute.RequestPermissions.path)
                     }

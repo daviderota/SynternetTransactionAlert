@@ -15,7 +15,6 @@ class UserPreferencesRepository @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) {
     private object PreferencesKeys {
-        // Chiave per recuperare i dati
         val accessTokenKey = stringPreferencesKey(Const.ACCESS_TOKEN)
         val natsUrlKey = stringPreferencesKey(Const.NATS_URL)
         val streamEthKey = stringPreferencesKey(Const.STREAM_ETH)
@@ -24,7 +23,6 @@ class UserPreferencesRepository @Inject constructor(
         val thresholdSolKey = stringPreferencesKey(Const.THRESHOLD_SOL)
     }
 
-    // Funzione per recuperare l'access token da DataStore
     suspend fun getAccessTokenFromDataStore(): String {
         return dataStore.data.map { preferences ->
             preferences[PreferencesKeys.accessTokenKey]
@@ -64,7 +62,6 @@ class UserPreferencesRepository @Inject constructor(
     }
 
 
-    // Funzione per salvare i dati
     suspend fun save(
         accessToken: String,
         natsUrl: String,
@@ -78,7 +75,6 @@ class UserPreferencesRepository @Inject constructor(
             preferences[PreferencesKeys.natsUrlKey] = natsUrl
             preferences[PreferencesKeys.streamEthKey] = streamEth
             preferences[PreferencesKeys.streamSolKey] = streamSol
-            // 21004032965000000
             preferences[PreferencesKeys.thresholdEthKey] = thresholdEth.toInt().toString()
             preferences[PreferencesKeys.thresholdSolKey] = thresholdSol.toInt().toString()
 

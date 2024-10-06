@@ -3,7 +3,7 @@
     <string name="activated_services_hello">Ciao, mi chiamo WApp</string>
     <string name="activated_services_whale_assistant">la tua assistente Balena</string>
     <string name="activated_services_is_started">Il Servizio in background è stato avviato..controlla le notifiche!</string>
-    <string name="activated_services_stop_and_edit">Modifica la ocnfigurazione</string>
+    <string name="activated_services_stop_and_edit">Modifica la configurazione</string>
     <string name="user_config_hello">Ciao, mi chiamo WApp e ti aiuterò ad intercettare i movimenti delle crypto balene!</string>
     <string name="user_config_description">Sottoscrivi tramite il sito https://portal.synternet.com gli stream \'synternet.ethereum.tx\' e \'synternet.solana.tx\' e compila il form qui sotto.</string>
     <string name="save_and_run">Salva e avvia</string>

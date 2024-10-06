@@ -51,7 +51,14 @@ class DataViewModel @Inject constructor(private val userPreferencesRepository: U
             thresholdEth = userPreferencesRepository.getThresholdEth()
             _userConfigLoaded.value = true
         }
+
     }
+
+
+    /**
+     * 3 000 000 000 000 000 000 -> 3ETH
+     * 2 100 403 296 500 00 00
+     */
 
     fun saveData(
         accessToken: String,
@@ -74,4 +81,5 @@ class DataViewModel @Inject constructor(private val userPreferencesRepository: U
             _isSaved = true
         }
     }
+
 }

@@ -24,7 +24,6 @@ import ro.da.synternet.whale.ui.startMyForegroundService
 import ro.da.synternet.whale.ui.stopMyForegroundService
 import ro.da.synternet.whale.viewmodel.DataViewModel
 
-var isPermissionGranted: Boolean = false
 
 
 @Composable
@@ -58,8 +57,8 @@ fun ServiceActivatedScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally, // Allinea i contenuti orizzontalmente al centro
-            verticalArrangement = Arrangement.Center //
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
 
 

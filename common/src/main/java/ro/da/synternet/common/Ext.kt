@@ -16,7 +16,6 @@ fun isValidUserConfig(
 ): Boolean {
     return (accessToken.trim().isNotEmpty() &&
             natsUrl.trim().isNotEmpty() &&
-            // stream.trim().isNotEmpty() &&
             thresholdSol.trim().isNotEmpty() &&
             thresholdEth.trim().isNotEmpty() &&
             thresholdSol.trim().toLong() > 0 &&

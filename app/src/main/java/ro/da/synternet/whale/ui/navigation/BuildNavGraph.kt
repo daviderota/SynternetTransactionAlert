@@ -82,10 +82,10 @@ private fun addServiceActivated(
     navGraphBuilder: NavGraphBuilder
 ) {
     navGraphBuilder.composable(route = NavRoute.ServiceActivated.path) {
-
         ServiceActivatedScreen(context,
             goToUserConfig = {
-                navController.navigate(NavRoute.FormUserConfig.path)
+                navController.navigate(
+                    route = NavRoute.FormUserConfig.path)
             }
         )
 

@@ -1,5 +1,7 @@
 package ro.da.synternet.whale.ui.navigation
 
+import androidx.navigation.navArgument
+
 sealed class NavRoute(val path: String) {
 
     data object Splashscreen: NavRoute("splashscreen")

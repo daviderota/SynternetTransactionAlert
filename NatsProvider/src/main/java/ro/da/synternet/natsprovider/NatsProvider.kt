@@ -13,7 +13,11 @@ import java.time.Instant
 import java.util.*
 
 
-class NatsProvider(private val accessToken: String, private val natsUrl: String, private val stream: String) {
+class NatsProvider(
+    private val accessToken: String,
+    private val natsUrl: String,
+    private val stream: String
+) {
 
     private val options: Options
     private var nc: Connection? = null
@@ -30,8 +34,12 @@ class NatsProvider(private val accessToken: String, private val natsUrl: String,
     }
 
     fun connect(connectionMessageHandler: MessageHandler) {
-        nc = Nats.connect(options)
-        connectionDispatcher = nc?.createDispatcher(connectionMessageHandler)
+        try {
+            nc = Nats.connect(options)
+            connectionDispatcher = nc?.createDispatcher(connectionMessageHandler)
+        } catch (e: Exception) {
+            val foo = 1
+        }
     }
 
     fun subscribe(subscribeMessageHandler: MessageHandler) {
@@ -112,11 +120,14 @@ class NatsProvider(private val accessToken: String, private val natsUrl: String,
     private fun signJwt(payload: Map<String, Any>, account: NKey): String {
         val header = mapOf("typ" to "JWT", "alg" to "ed25519-nkey")
         val gson = Gson()
-        val headerEncoded = String(Encoding.base64UrlEncode(gson.toJson(header).toByteArray())).trimEnd('=')
-        val payloadEncoded = String(Encoding.base64UrlEncode(gson.toJson(payload).toByteArray())).trimEnd('=')
+        val headerEncoded =
+            String(Encoding.base64UrlEncode(gson.toJson(header).toByteArray())).trimEnd('=')
+        val payloadEncoded =
+            String(Encoding.base64UrlEncode(gson.toJson(payload).toByteArray())).trimEnd('=')
 
         val jwtBase = "$headerEncoded.$payloadEncoded"
-        val signature = String(Encoding.base64UrlEncode(account.sign(jwtBase.toByteArray()))).trimEnd('=')
+        val signature =
+            String(Encoding.base64UrlEncode(account.sign(jwtBase.toByteArray()))).trimEnd('=')
 
         return "$jwtBase.$signature"
     }

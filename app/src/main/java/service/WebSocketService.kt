@@ -57,8 +57,8 @@ class WebSocketService : Service() {
         natsUrl = intent?.getStringExtra(Const.NATS_URL)
         streamEth = intent?.getStringExtra(Const.STREAM_ETH)
         streamSol = intent?.getStringExtra(Const.STREAM_SOL)
-        thresholdEth = intent?.getStringExtra(Const.THRESHOLD_ETH)?.toLong()//?.toUETH()
-        thresholdSol = intent?.getStringExtra(Const.THRESHOLD_SOL)?.toLong()//?.toUSOL()
+        thresholdEth = intent?.getStringExtra(Const.THRESHOLD_ETH)?.toLong()
+        thresholdSol = intent?.getStringExtra(Const.THRESHOLD_SOL)?.toLong()
 
         if (isValidUserConfig(
                 accessToken ?: "",
@@ -68,14 +68,16 @@ class WebSocketService : Service() {
             )
         ) {
             serviceScope.launch {
-                startWebSocketEth(accessToken ?: "", natsUrl ?: "", streamEth ?: "")
-                startWebSocketSol(accessToken ?: "", natsUrl ?: "", streamSol ?: "")
+                if (startWebSocketEth(accessToken ?: "", natsUrl ?: "", streamEth ?: "") &&
+                    startWebSocketSol(accessToken ?: "", natsUrl ?: "", streamSol ?: "")
+                ) {
+                    createNotificationChannel()
+                    val notification = createServiceNotification()
+                    startForeground(1, notification)
+                }
             }
         }
 
-        createNotificationChannel()
-        val notification = createServiceNotification()
-        startForeground(1, notification)
         return START_STICKY
     }
 
@@ -106,35 +108,45 @@ class WebSocketService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        natsProviderEth?.unsubscribe()
-        natsProviderEth?.disconnect()
-
-        natsProviderSol?.unsubscribe()
-        natsProviderSol?.disconnect()
-    }
-
-    private fun startWebSocketEth(accessToken: String, natsUrl: String, stream: String) {
         try {
-            natsProviderEth = NatsProvider(accessToken, natsUrl, stream)
-            natsProviderEth?.connect(connectionMessageHandlerEth)
-            natsProviderEth?.subscribe(subscribeMessageHandlerEth)
-        } catch (e: Exception) {
+            natsProviderEth?.unsubscribe()
+            natsProviderEth?.disconnect()
 
+            natsProviderSol?.unsubscribe()
+            natsProviderSol?.disconnect()
+        } catch (e: Exception) {
+            var foo = 1
         }
     }
 
-    private fun startWebSocketSol(accessToken: String, natsUrl: String, stream: String) {
-        try {
+    private fun startWebSocketEth(accessToken: String, natsUrl: String, stream: String): Boolean {
+        return try {
+            natsProviderEth = NatsProvider(accessToken, natsUrl, stream)
+            natsProviderEth?.connect(connectionMessageHandlerEth)
+            natsProviderEth?.subscribe(subscribeMessageHandlerEth)
+            true
+        } catch (e: Exception) {
+            triggerLocalNotificationError(Type.ETH, e.message.toString())
+            false
+        }
+    }
+
+    private fun startWebSocketSol(accessToken: String, natsUrl: String, stream: String): Boolean {
+        return try {
             natsProviderSol = NatsProvider(accessToken, natsUrl, stream)
             natsProviderSol?.connect(connectionMessageHandlerSol)
             natsProviderSol?.subscribe(subscribeMessageHandlerSol)
+            true
         } catch (e: Exception) {
-
+            triggerLocalNotificationError(Type.SOL, e.message.toString())
+            false
         }
     }
 
 
     private val connectionMessageHandlerEth = MessageHandler { connectionMsg ->
+        val connectionResponse = String(connectionMsg.data, StandardCharsets.UTF_8)
+        println("Connection Message: $connectionResponse")
     }
 
     private val subscribeMessageHandlerEth = MessageHandler { subscribeMsg ->
@@ -152,6 +164,8 @@ class WebSocketService : Service() {
 
 
     private val connectionMessageHandlerSol = MessageHandler { connectionMsg ->
+        val connectionResponse = String(connectionMsg.data, StandardCharsets.UTF_8)
+        println("Connection Message: $connectionResponse")
     }
 
     private val subscribeMessageHandlerSol = MessageHandler { subscribeMsg ->
@@ -168,6 +182,13 @@ class WebSocketService : Service() {
 
     }
 
+    private fun triggerLocalNotificationError(type: Type, value: String) {
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notification = createLocalNotificationError(type, value)
+        notificationManager.notify(notificationId.nextInt(100), notification)
+    }
+
     private fun triggerLocalNotification(type: Type, address: String?, value: String) {
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -177,6 +198,37 @@ class WebSocketService : Service() {
 
     enum class Type(val value: String) {
         ETH("ETH"), SOL("SOL")
+    }
+
+    private fun createLocalNotificationError(type: Type, message: String): Notification {
+        val notificationIntent = Intent(this, MainActivity::class.java)
+        val bundle = Bundle()
+        bundle.putString("cry_error", message)
+        bundle.putString("cry_type", if (type == Type.ETH) "ETH" else "SOL")
+        notificationIntent.putExtras(bundle)
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(
+            this, 1011, notificationIntent, PendingIntent.FLAG_IMMUTABLE
+        )
+
+
+        val title = when (type) {
+            Type.ETH -> "Eth Error"
+            Type.SOL -> "SOLANA Error"
+        }
+
+        val icon = when (type) {
+            Type.ETH -> R.drawable.ethereum
+            Type.SOL -> R.drawable.solana
+        }
+
+        return NotificationCompat.Builder(this, "FS_CHANNEL_ID")
+            .setContentTitle(title)
+            .setContentText(message)
+            .setOngoing(false)
+            .setAutoCancel(true)
+            .setSmallIcon(icon)
+            .setContentIntent(pendingIntent)
+            .build()
     }
 
     private fun createLocalNotification(type: Type, value: String, address: String?): Notification {

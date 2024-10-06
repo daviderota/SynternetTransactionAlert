@@ -14,9 +14,7 @@ import dagger.hilt.components.SingletonComponent
 import ro.da.synternet.datastore.repository.UserPreferencesRepository
 import javax.inject.Singleton
 
-// Estensione per ottenere il DataStore dal context
 val Context.dataStore by preferencesDataStore(name = "user_prefs")
-
 
 @Module
 @InstallIn(SingletonComponent::class)

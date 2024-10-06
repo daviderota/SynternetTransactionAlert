@@ -80,8 +80,8 @@ fun UserConfigFormScreen(
         modifier = Modifier
             .fillMaxWidth()
             .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally, // Allinea i contenuti orizzontalmente al centro
-        verticalArrangement = Arrangement.Center //
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
 
         Text(
