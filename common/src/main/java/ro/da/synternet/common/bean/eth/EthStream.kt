@@ -23,7 +23,15 @@ data class EthStream(
                 )
             } else {
                 if(value.length >1) {
-                    "0" + "$decimalSeparator" + value.substring(0, 2)
+                    val leng = ueth_number-value.length
+                    if(leng >=0){
+                        var strLeng = ""
+                        repeat(leng-1){
+                            strLeng+="0"
+                        }
+                        "0" + "$decimalSeparator$strLeng" + value.substring(0, 2)
+                    }
+                    else "0" + "$decimalSeparator" + value.substring(0, 2)
                 }else{
                     "0"+decimalSeparator+"00"
                 }
