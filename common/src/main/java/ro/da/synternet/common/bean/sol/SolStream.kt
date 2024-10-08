@@ -1,6 +1,7 @@
 package ro.da.synternet.common.bean.sol
 
 import ro.da.synternet.common.decimalSeparator
+import ro.da.synternet.common.ueth_number
 import ro.da.synternet.common.usol_number
 import java.text.DecimalFormatSymbols
 
@@ -18,7 +19,15 @@ data class SolStream(
                 (value.length - usol_number) + 2
             )
         } else {
-            "0" + "$decimalSeparator" + value.substring(0, 2)
+            val leng = usol_number - value.length
+            if (leng >= 0) {
+                var strLeng = ""
+                repeat(leng - 1) {
+                    strLeng += "0"
+                }
+                "0" + "$decimalSeparator$strLeng" + value.substring(0, 2)
+            } else
+                "0" + "$decimalSeparator" + value.substring(0, 2)
         }
         return returnValue.toFloat()
     }
