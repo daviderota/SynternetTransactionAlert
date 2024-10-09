@@ -9,7 +9,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.IBinder
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.gson.Gson
 import io.nats.client.MessageHandler
@@ -111,9 +110,11 @@ class WebSocketService : Service() {
         try {
             natsProviderEth?.unsubscribe()
             natsProviderEth?.disconnect()
+            natsProviderEth = null
 
             natsProviderSol?.unsubscribe()
             natsProviderSol?.disconnect()
+            natsProviderSol = null
         } catch (e: Exception) {
             var foo = 1
         }
@@ -121,24 +122,32 @@ class WebSocketService : Service() {
 
     private fun startWebSocketEth(accessToken: String, natsUrl: String, stream: String): Boolean {
         return try {
-            natsProviderEth = NatsProvider(accessToken, natsUrl, stream)
-            natsProviderEth?.connect(connectionMessageHandlerEth)
-            natsProviderEth?.subscribe(subscribeMessageHandlerEth)
-            true
+            if (natsProviderEth == null) {
+                natsProviderEth = NatsProvider(accessToken, natsUrl, stream)
+                natsProviderEth?.connect(connectionMessageHandlerEth)
+                natsProviderEth?.subscribe(subscribeMessageHandlerEth)
+                true
+            } else
+                false
         } catch (e: Exception) {
             triggerLocalNotificationError(Type.ETH, e.message.toString())
+            natsProviderEth = null
             false
         }
     }
 
     private fun startWebSocketSol(accessToken: String, natsUrl: String, stream: String): Boolean {
         return try {
-            natsProviderSol = NatsProvider(accessToken, natsUrl, stream)
-            natsProviderSol?.connect(connectionMessageHandlerSol)
-            natsProviderSol?.subscribe(subscribeMessageHandlerSol)
-            true
+            if (natsProviderSol == null) {
+                natsProviderSol = NatsProvider(accessToken, natsUrl, stream)
+                natsProviderSol?.connect(connectionMessageHandlerSol)
+                natsProviderSol?.subscribe(subscribeMessageHandlerSol)
+                true
+            } else
+                false
         } catch (e: Exception) {
             triggerLocalNotificationError(Type.SOL, e.message.toString())
+            natsProviderSol = null
             false
         }
     }
@@ -151,14 +160,12 @@ class WebSocketService : Service() {
 
     private val subscribeMessageHandlerEth = MessageHandler { subscribeMsg ->
         val response = String(subscribeMsg.data, StandardCharsets.UTF_8)
-        Log.d("ETH", response)
         val ethStream = gson.fromJson(response, EthStream::class.java)
         thresholdEth?.let { thresholdEth ->
             val ethValue = ethStream.getEthValue()
             if (ethValue > thresholdEth.toFloat()) {
                 triggerLocalNotification(Type.ETH, ethStream.hash, ethValue.toString())
             }
-
         }
     }
 
@@ -170,7 +177,7 @@ class WebSocketService : Service() {
 
     private val subscribeMessageHandlerSol = MessageHandler { subscribeMsg ->
         val response = String(subscribeMsg.data, StandardCharsets.UTF_8)
-        Log.d("SOL", response)
+
         val solStream = gson.fromJson(response, SolStream::class.java)
         thresholdSol?.let { thresholdSol ->
             val solValue = solStream.getSolValue()
@@ -189,10 +196,10 @@ class WebSocketService : Service() {
         notificationManager.notify(notificationId.nextInt(100), notification)
     }
 
-    private fun triggerLocalNotification(type: Type, address: String?, value: String) {
+    private fun triggerLocalNotification(type: Type, hash: String, ethValue: String) {
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val notification = createLocalNotification(type, value, address)
+        val notification = createLocalNotification(type, hash, ethValue)
         notificationManager.notify(notificationId.nextInt(100), notification)
     }
 
@@ -203,8 +210,8 @@ class WebSocketService : Service() {
     private fun createLocalNotificationError(type: Type, message: String): Notification {
         val notificationIntent = Intent(this, MainActivity::class.java)
         val bundle = Bundle()
-        bundle.putString("cry_error", message)
-        bundle.putString("cry_type", if (type == Type.ETH) "ETH" else "SOL")
+        bundle.putString(Const.B_CRY_ERROR, message)
+        bundle.putString(Const.B_CRY_TYPE, if (type == Type.ETH) "ETH" else "SOL")
         notificationIntent.putExtras(bundle)
         val pendingIntent: PendingIntent = PendingIntent.getActivity(
             this, 1011, notificationIntent, PendingIntent.FLAG_IMMUTABLE
@@ -231,15 +238,16 @@ class WebSocketService : Service() {
             .build()
     }
 
-    private fun createLocalNotification(type: Type, value: String, address: String?): Notification {
+    private fun createLocalNotification(type: Type, hash: String?, value: String): Notification {
         val notificationIntent = Intent(this, MainActivity::class.java)
         val bundle = Bundle()
-        bundle.putString("cry_address", address)
-        bundle.putString("cry_value", value)
-        bundle.putString("cry_type", if (type == Type.ETH) "ETH" else "SOL")
+        bundle.putString(Const.B_CRY_ADDRESS, hash)
+        bundle.putString(Const.B_CRY_VALUE, value)
+        bundle.putString(Const.B_CRY_TYPE, if (type == Type.ETH) "ETH" else "SOL")
         notificationIntent.putExtras(bundle)
         val pendingIntent: PendingIntent = PendingIntent.getActivity(
-            this, 1010, notificationIntent, PendingIntent.FLAG_IMMUTABLE
+            this, 1010, notificationIntent,
+            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
 
@@ -257,8 +265,8 @@ class WebSocketService : Service() {
             Type.ETH -> R.drawable.ethereum
             Type.SOL -> R.drawable.solana
         }
-        val addressStr = if (address != null)
-            "($address)"
+        val addressStr = if (hash != null)
+            "($hash)"
         else ""
 
         return NotificationCompat.Builder(this, "FS_CHANNEL_ID")

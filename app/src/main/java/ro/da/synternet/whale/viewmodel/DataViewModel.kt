@@ -1,6 +1,5 @@
 package ro.da.synternet.whale.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -24,6 +23,8 @@ class DataViewModel @Inject constructor(private val userPreferencesRepository: U
     var streamSol by mutableStateOf("synternet.solana.tx")
     var thresholdEth by mutableStateOf("")
     var thresholdSol by mutableStateOf("")
+    var stopService by mutableStateOf(false)
+
     private val _userConfigLoaded = MutableStateFlow(false)
     val userConfigLoaded: StateFlow<Boolean> = _userConfigLoaded
 
@@ -33,25 +34,26 @@ class DataViewModel @Inject constructor(private val userPreferencesRepository: U
     init {
 
         viewModelScope.launch {
+            stopService = true
             accessToken = userPreferencesRepository.getAccessTokenFromDataStore()
-            Log.d("MyDataStoreService", "Access Token: $accessToken")
 
             natsUrl = userPreferencesRepository.getNatsUrlDataStore()
-            Log.d("MyDataStoreService", "Nats url: $natsUrl")
 
             streamEth = userPreferencesRepository.getStreamEthDataStore()
-            Log.d("MyDataStoreService", "Stream Data Store Eth: $streamEth")
-
 
             streamSol = userPreferencesRepository.getStreamSolDataStore()
-            Log.d("MyDataStoreService", "Stream Data Store Sol: $streamSol")
 
             thresholdSol = userPreferencesRepository.getThresholdSol()
 
             thresholdEth = userPreferencesRepository.getThresholdEth()
+            stopService = false
             _userConfigLoaded.value = true
         }
 
+    }
+
+    fun manualStopService(){
+        stopService = true
     }
 
 
@@ -81,5 +83,7 @@ class DataViewModel @Inject constructor(private val userPreferencesRepository: U
             _isSaved = true
         }
     }
+
+
 
 }

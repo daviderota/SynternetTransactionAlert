@@ -25,7 +25,6 @@ import ro.da.synternet.whale.ui.stopMyForegroundService
 import ro.da.synternet.whale.viewmodel.DataViewModel
 
 
-
 @Composable
 fun ServiceActivatedScreen(
     context: Context,
@@ -37,6 +36,7 @@ fun ServiceActivatedScreen(
     val natsUrl = viewModel.natsUrl
     val thresholdEth = viewModel.thresholdEth
     val thresholdSol = viewModel.thresholdSol
+    val stopSevice = viewModel.stopService
 
 
     if (isValidUserConfig(
@@ -44,7 +44,7 @@ fun ServiceActivatedScreen(
             natsUrl,
             thresholdEth,
             thresholdSol
-        )
+        ) && !stopSevice
     ) {
         startMyForegroundService(
             LocalContext.current, accessToken,
@@ -91,12 +91,12 @@ fun ServiceActivatedScreen(
 
             Button(
                 onClick = {
+                    viewModel.manualStopService()
                     stopMyForegroundService(context)
                     goToUserConfig()
                 }) {
                 Text(text = stringResource(id = R.string.activated_services_stop_and_edit))
             }
-
 
 
         }
