@@ -33,5 +33,4 @@ rootProject.name = "WApp"
 include(":app")
 include(":NatsProvider")
 include(":datastore")
-include(":mylibrary")
 include(":common")
